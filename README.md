@@ -18,16 +18,19 @@ The following sources were used for the data included in this repository:
 -  https://docs.google.com/spreadsheets/d/1gQujXQQGOVNaiuwSN680Hq-FDVsCwvN-3AazykOBON0/edit?usp=sharing
 - Cloned locally July 19, 2026
 - This database is a compilation of Tommy John surgeries for MLB-associated players that have been confirmed through a published media report of some kind. This is not a completely exhaustive list, as some teams are guarded about releasing TJ related information, and some TJ surgeries go completely unreported. However, this is the most comprehensive single source available online, and considered by the public to be the best resource.
+- Cleaning/Preprocessing output: Average age per TJ recipient and number of recipients per year, filtering only for AA, AAA, and MLB Pitchers.
 
 ### Statcast Statistics - Pitch Arsenal
 - https://baseballsavant.mlb.com/leaderboard/pitch-arsenals?year=2025&min=q&type=avg_speed&hand=
 - Hosted by Baseball Savant
 - This dataset contains the average pitch velocity per pitch type per pitcher over a given MLB season. This is limited to a Qualified minimum pitch count per pitch type of 2.5 pitches per team game (a pitcher may not play every team game)
+- Cleaning/Preprocessing output: Average velocity and number of qualified users per year for 4-seam fastball, Changeup, Slider, and Curveball pitch types in MLB.
 
 ### Standard Pitching Statistics
 - https://www.baseball-reference.com/leagues/majors/2025-standard-pitching.shtml
 - Hosted by Baseball Reference
-- This dataset contains the standard pitching statistics for every pitcher that appeared at least once over a given season. 
+- This dataset contains the standard pitching statistics for every pitcher that appeared at least once over a given season.
+- Cleaning/Preprocessing output: The total pitchers used in MLB and the average age and innings pitched per pitcher per year.
 
 Thank you to those sources for being freely available to the public.
 
