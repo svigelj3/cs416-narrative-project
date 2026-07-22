@@ -53,11 +53,8 @@ Combine information from all the pitcher data files by year
 Total Pitchers used, average Innings Pitched, average pitcher age by year
 '''
 def pitchers_clean():
-    cleaned_lines = []
     cwd = Path(os.getcwd())
-
     year_data = {}
-
     for year in range(2008, 2026):
         year_data[year] = []
         p_source = Path(cwd, 'dataset/pitchers_{}.csv'.format(year))
@@ -68,7 +65,6 @@ def pitchers_clean():
             innings_sum = 0
             prev_rk = 0
             for line in reader:
-                cleaned_line = []
                 if header:
                     header = False
                     continue
@@ -108,9 +104,59 @@ def pitchers_clean():
             )
             outfile.write(outstr)
                 
-
+'''
+Pitch Velocity DB Cleanup/Processing
+Combine information from all the pitch arsenal data files by year 
+Velocity and number of qualified users for 4seam fastball, changeup, slider, and curveball
+'''
 def pitch_velo_clean():
-    pass
+    cwd = Path(os.getcwd())
+    year_data = {}
+    for year in range(2008, 2026):
+        a_source = Path(cwd, 'dataset/pitch_arsenals_{}.csv'.format(year))
+        fast = []
+        change = []
+        slider = []
+        curve = []
+        with open(a_source, 'r') as a_db_file:
+            reader = csv.reader(a_db_file)
+            header = True
+            for line in reader:
+                if header:
+                    header = False
+                    continue
+                if line[2] != '':
+                    # 4 seam fastball
+                    fast.append(float(line[2]))
+                if line[5] != '':
+                    # slider
+                    slider.append(float(line[5]))
+                if line[6] != '':
+                    # changeup
+                    change.append(float(line[6]))
+                if line[7] != '':
+                    # curveball
+                    curve.append(float(line[7]))
+        year_data[year] = [fast, change, slider, curve]
+    # Now process it
+    v_dest = Path(cwd, 'cleaned_data/velo.csv')
+    with open(v_dest, 'w') as outfile:
+        outfile.write('Year,Total4seam,Average4seam,TotalChange,AverageChange,TotalSlide,AverageSlide,TotalCurve,AverageCurve\n')
+        for year in year_data:
+            outstr = '{},{},{},{},{},{},{},{},{}\n'.format(
+                year,
+                len(year_data[year][0]),
+                round(sum(year_data[year][0]) / len(year_data[year][0]), 1),
+                len(year_data[year][1]),
+                round(sum(year_data[year][1]) / len(year_data[year][1]), 1),
+                len(year_data[year][2]),
+                round(sum(year_data[year][2]) / len(year_data[year][2]), 1),
+                len(year_data[year][3]),
+                round(sum(year_data[year][3]) / len(year_data[year][3]), 1),
+            )
+            outfile.write(outstr)            
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
