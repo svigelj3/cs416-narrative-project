@@ -1,6 +1,4 @@
-Player,TJ Surgery Date,Team,Level,Position,Throws,Country,High School,College(s),Age,Return Date (same level),Recovery Time (months),mlbamid,fgid,Surgeon(s),Post-TJ MLB G,Post-TJ MLB IP/PA,Active,Year,Month,Day,"Started
-Throwing",Mound,Bullpen,"Live
-Hitters",Game,Setback,Setback Type,Setback,Setback Type,G,GS,IP,K-BB%,ERA-,FIP-,G,GS,IP,K-BB%,ERA-,FIP-
+Player,TJ Surgery Date,Team,Level,Position,Throws,Country,High School,College(s),Age,Return Date (same level),Recovery Time (months),mlbamid,fgid,Surgeon(s),Post-TJ MLB G,Post-TJ MLB IP/PA,Active,Year,Month,Day,"Started Throwing",Mound,Bullpen,"Live Hitters",Game,Setback,Setback Type,Setback,Setback Type,G,GS,IP,K-BB%,ERA-,FIP-,G,GS,IP,K-BB%,ERA-,FIP-
 Keegan Akin,7/15/2026,BAL,MLB,P,L,United States,Michigan,Western Michigan,31,,,669211,19362,Dr. Keith Meister,0,0.0,1,2026,7,15,,,,,,,,,,,,,,,,,,,,,
 Yordin Chalas,7/1/2026,ARI,AA,P,R,Dominican,,,22,,,808054,sa3021508,,0,0.0,1,2026,7,1,,,,,,,,,,,,,,,,,,,,,
 Welinton Herrera,7/1/2026,COL,MLB,P,L,Dominican,,,22,,,700327,29318,,0,0.0,1,2026,7,1,,,,,,,,,,,,,,,,,,,,,
