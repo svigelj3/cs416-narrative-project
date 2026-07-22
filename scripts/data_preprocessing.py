@@ -8,44 +8,51 @@ import csv
 import argparse
 
 '''
-Tommy John DB cleanup
+Tommy John DB cleanup/processing
 We want to filter out a bunch of columns we don't need
-As well as normalize dates to only the year
-and remove any non-pitcher entries
+As well as normalize dates to only the year and remove any non-pitcher entries
+This will give us the number of surgeries on pitchers per year and the average age of the pitcher
 '''
 def tj_clean():
     cleaned_lines = []
     cwd = Path(os.getcwd())
-
     tj_source = Path(cwd, 'dataset/TJ_List.csv')
+
+    year_data = {}
     with open(tj_source, 'r') as tj_db_file:
         header = True
         reader = csv.reader(tj_db_file)
         for line in reader:
-            filtered_tokens = []
-            filtered_tokens.append(line[0]) # Name
-            filtered_tokens.append(line[1]) # Surgery Date
-            filtered_tokens.append(line[2]) # Team
-            filtered_tokens.append(line[3]) # Level
-            filtered_tokens.append(line[4]) # Position
-            filtered_tokens.append(line[9]) # Age
-            if not header:
-                # non header we need to process more
-                # first we only care about pitchers
-                if filtered_tokens[4] != 'P':
-                    continue
-                # we only care about surgery year
-                date_tokens = filtered_tokens[1].split('/')
-                year = date_tokens[2]
-                filtered_tokens[1] = year
-            else:
+            if header:
                 header = False
-            clean_line = ','.join(filtered_tokens)
-            cleaned_lines.append(clean_line)
+                continue
+
+            # first we only care about pitchers
+            if line[4] != 'P':
+                continue
+            # also filter out for high minors and major leagues only
+            # this should be more consistent reporting across teams
+            if line[3] not in ['MLB', 'AAA', 'AA']:
+                continue
+            # we only care about surgery year
+            date_tokens = line[1].split('/')
+            year = date_tokens[2]
+            # add the age of the pitcher to the list for that year
+            if year not in year_data:
+                year_data[year] = []
+            year_data[year].append(int(line[9]))
+    
+
     tj_dest = Path(cwd, 'cleaned_data/tjdb.csv')
     with open(tj_dest, 'w') as outfile:
-        for line in cleaned_lines:
-            outfile.write(line + '\n')
+        outfile.write('Year,TJSurgeries,AverageAge\n')
+        for year in year_data:
+            outstr = '{},{},{}\n'.format(
+                year,
+                len(year_data[year]),
+                round(sum(year_data[year]) / len(year_data[year]), 1)
+            )
+            outfile.write(outstr)
 
 '''
 Pitchers DB Cleanup/Processing
