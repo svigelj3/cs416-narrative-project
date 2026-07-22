@@ -47,9 +47,67 @@ def tj_clean():
         for line in cleaned_lines:
             outfile.write(line + '\n')
 
-
+'''
+Pitchers DB Cleanup/Processing
+Combine information from all the pitcher data files by year 
+Total Pitchers used, average Innings Pitched, average pitcher age by year
+'''
 def pitchers_clean():
-    pass 
+    cleaned_lines = []
+    cwd = Path(os.getcwd())
+
+    year_data = {}
+
+    for year in range(2008, 2026):
+        year_data[year] = []
+        p_source = Path(cwd, 'dataset/pitchers_{}.csv'.format(year))
+        with open(p_source, 'r') as p_db_file:
+            reader = csv.reader(p_db_file)
+            header = True
+            age_sum = 0
+            innings_sum = 0
+            prev_rk = 0
+            for line in reader:
+                cleaned_line = []
+                if header:
+                    header = False
+                    continue
+                # handle duplicates
+                # a duplicate will happen if a pitcher is traded mid season
+                if line[0] == prev_rk:
+                    continue
+                prev_rk = line[0] # this now keeps track of the total pitchers 
+                # first filter for what we are interested in
+                age_sum += int(line[2]) # Age
+                # innings is funny because .1 denotes 1/3 and .2 denotes 2/3 innings.
+                # Innings Pitched is index 16
+                inning_val = 0
+                inning_frac = 0
+                if '.' in line[16]:
+                    inning_tokens = line[16].split('.')
+                    if inning_tokens[1] == '1':
+                        inning_frac = 1 / 3
+                    elif inning_tokens[1] == '2':
+                        inning_frac = 2 / 3
+                    inning_val = float(inning_tokens[0])
+                else:
+                    inning_val = float(line[16])
+                innings_sum += inning_val + inning_frac
+            total = int(prev_rk)
+            year_data[year] = [total, innings_sum, age_sum]
+    # now write file
+    p_dest = Path(cwd, 'cleaned_data/pitchers.csv')
+    with open(p_dest, 'w') as outfile:
+        outfile.write('Year,TotalPitchers,AverageIP,AverageAge\n')
+        for year in year_data:
+            outstr = '{},{},{},{}\n'.format(
+                year,
+                year_data[year][0],
+                round(year_data[year][1] / year_data[year][0], 3),
+                round(year_data[year][2] / year_data[year][0], 3)
+            )
+            outfile.write(outstr)
+                
 
 def pitch_velo_clean():
     pass
