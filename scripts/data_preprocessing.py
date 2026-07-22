@@ -103,8 +103,8 @@ def pitchers_clean():
             outstr = '{},{},{},{}\n'.format(
                 year,
                 year_data[year][0],
-                round(year_data[year][1] / year_data[year][0], 3),
-                round(year_data[year][2] / year_data[year][0], 3)
+                round(year_data[year][1] / year_data[year][0], 1),
+                round(year_data[year][2] / year_data[year][0], 1)
             )
             outfile.write(outstr)
                 
