@@ -1,6 +1,31 @@
+<!DOCTYPE html>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <html>
-    <h1>
-        CS416 Data Visualization Project
-    </h1>
-    <p>Hello World!</p>
+    <head>
+        <meta charset="UTF-8">
+        <title>MLB Pitching Visualization</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <h1>
+            CS416 Data Visualization Project: MLB Pitching Visualization
+        </h1>
+        <p>Hello World!</p>
+        <p>Lost numbers: <span id="data"></span></p>
+        <svg class="chart" width="120" height="500">
+        </svg>
+
+        <script>
+            const data = [4,8,15,16,23,42];
+            document.getElementById("data").innerHTML = data;
+            d3.select(".chart")
+            .selectAll("rect")
+            .data(data)
+            .enter().append("rect")
+            .attr("width", 19)
+            .attr("height", function (d) { return 10*d; })
+            .attr("x", function (d,i) { return 20*i; })
+            .attr("y", function (d) { return 420 - 10*d; });
+        </script>
+    </body>
 </html>
