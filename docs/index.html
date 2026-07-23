@@ -6,7 +6,7 @@
         <title>MLB Pitching Visualization</title>
         <link rel="stylesheet" href="styles.css">
     </head>
-    <body onload="load_velocity_data()">
+    <body onload="load_pitcher_data()">
         <figure>
             <svg class="chart"></svg>
             <svg class="legend"></svg>
@@ -21,9 +21,9 @@
             async function load_tj_data() {
                 const tj_data = await d3.csv("tjdb.csv");
                 // x domain is the range of years
-                const x_domain_arr = range(d3.min(tj_data, d => +d.Year), d3.max(tj_data, d => +d.Year))
+                const x_domain_arr = range(d3.min(tj_data, d => +d.Year), d3.max(tj_data, d => +d.Year));
                 // y domain is 0 to the max surgery val in a year
-                const y_domain_arr = [0, d3.max(tj_data, d => +d.TJSurgeries)]
+                const y_domain_arr = [0, d3.max(tj_data, d => +d.TJSurgeries)];
                 
                 // Calculate scales
                 const x_scale = d3.scaleBand()
@@ -61,7 +61,7 @@
                   .selectAll("figcaption")
                   .data([1])
                   .enter().append("figcaption")
-                  .html("Number of UCL Reconstruction surgeries per year in AA, AAA, and MLB Pitchers.")
+                  .html("Number of UCL Reconstruction surgeries per year in AA, AAA, and MLB Pitchers.");
 
                 //add page header
                 d3.select("body")
@@ -69,10 +69,118 @@
                   .html("Tommy John Surgeries over Time");
             }
 
+            async function load_pitcher_data() {
+                const p_data = await d3.csv("pitchers.csv");
+                // x domain is the range of years
+                const x_domain_arr_p = range(d3.min(p_data, d => +d.Year), d3.max(p_data, d => +d.Year));
+                // x domain for the line is slightly different
+                const x_domain_arr_i = [d3.min(p_data, d => +d.Year), d3.max(p_data, d => +d.Year)];
+                // y domain for bars is custom. 400 to max so the bars take up a good amount of the page
+                const y_domain_arr_p = [400, d3.max(p_data, d => +d.TotalPitchers)];
+                // y domain for line will be innings pitched. This will be overlayed on the bars but have its own scale
+                const y_domain_arr_i = [20, 75];
+
+                // Calculate scales
+                const x_scale_p = d3.scaleBand()
+                    .domain(x_domain_arr_p)
+                    .range([0,1000]);
+
+                const y_scale_p = d3.scaleLinear()
+                    .domain(y_domain_arr_p)
+                    .range([750,0]);
+                
+                const x_scale_i = d3.scaleLinear()
+                    .domain(x_domain_arr_i)
+                    .range([0 + (x_scale_p.bandwidth() / 2), 1000 - (x_scale_p.bandwidth() / 2)]);
+    
+                const y_scale_i = d3.scaleLinear()
+                    .domain(y_domain_arr_i)
+                    .range([750,0]);
+                
+                // make the bar chart
+                d3.select(".chart")
+                  .attr("width", 1000 + 50)
+                  .attr("height", 750 + 50)
+                  .append("g").attr("transform", "translate(25, 25)")
+                  .selectAll("rect")
+                  .data(p_data)
+                  .enter().append("rect")
+                  .attr("width", x_scale_p.bandwidth)
+                  .attr("height", function(d){ return 750 - y_scale_p(d.TotalPitchers); })
+                  .attr("x", function(d){ return x_scale_p(Number(d.Year)); })
+                  .attr("y", function(d){ return y_scale_p(Number(d.TotalPitchers)); });
+
+                // make and plot the line but need to add the offset for the bar
+                const innings = d3.line()
+                    .x(d => x_scale_i(d.Year))
+                    .y(d => y_scale_i(d.AverageIP));
+
+                d3.select(".chart")
+                  .append("g").attr("transform", "translate(25, 25)")
+                  .append("path")
+                  .attr("fill", "none")
+                  .attr("stroke", "firebrick")
+                  .attr("stroke-width", 3)
+                  .attr("d", innings(p_data));
+                
+                // add axes
+                d3.select(".chart").append("g")
+                  .attr("transform", "translate(25, 25)")
+                  .call(d3.axisLeft(y_scale_p));
+                
+                d3.select(".chart").append("g")
+                  .attr("transform", "translate(1025, 25)")
+                  .call(d3.axisRight(y_scale_i));
+                
+                d3.select(".chart").append("g")
+                  .attr("transform", "translate(25, 775)")
+                  .call(d3.axisBottom(x_scale_p));
+                
+                // build the legend
+                d3.select(".legend")
+                  .attr("width", 125)
+                  .attr("height", 50)
+                  .append("g").attr("transform", "translate(1050, 25)");
+                // Line
+                d3.select(".legend").append("circle")
+                  .attr("cx", 10)
+                  .attr("cy", 15)
+                  .attr("r", 5)
+                  .style("fill", "firebrick");
+                d3.select(".legend")
+                  .append("text")
+                  .attr("x", 21)
+                  .attr("y", 20)
+                  .text("Innings Pitched");
+                // Line
+                d3.select(".legend").append("rect")
+                  .attr("x", 5)
+                  .attr("y", 30)
+                  .attr("height", 10).attr("width", 10)
+                  .style("fill", "steelblue");
+                d3.select(".legend")
+                  .append("text")
+                  .attr("x", 21)
+                  .attr("y", 40)
+                  .text("Total Pitchers");
+                
+                // add caption to figure
+                d3.select("figure")
+                  .selectAll("figcaption")
+                  .data([1])
+                  .enter().append("figcaption")
+                  .html("Bars indicate total number of Pitchers used in an MLB season.\nLine indicates the Average Innings Pitched per pitcher used in the same MLB season.")
+
+                //add page header
+                d3.select("body")
+                  .insert("h1", ":first-child")
+                  .html("Pitcher Usage over Time");
+            }
+
             async function load_velocity_data() {
                 const v_data = await d3.csv("velo.csv");
-                const x_domain_arr = [d3.min(v_data, d => d.Year), d3.max(v_data, d => d.Year)]
-                const y_domain_arr = [75, 95]
+                const x_domain_arr = [d3.min(v_data, d => d.Year), d3.max(v_data, d => d.Year)];
+                const y_domain_arr = [75, 95];
                 // calculate scales
                 const x_scale = d3.scaleLinear()
                     .domain(x_domain_arr)
@@ -103,7 +211,7 @@
                 d3.select(".chart")
                   .attr("width", 1000 + 50)
                   .attr("height", 750 + 50)
-                  .append("g").attr("transform", "translate(25, 25)")
+                  .append("g").attr("transform", "translate(25, 25)");
 
                 // plot the lines
                 d3.select(".chart")
@@ -151,7 +259,7 @@
                 d3.select(".legend")
                   .attr("width", 125)
                   .attr("height", 90)
-                  .append("g").attr("transform", "translate(1050, 25)")
+                  .append("g").attr("transform", "translate(1050, 25)");
                 // Fastball
                 d3.select(".legend").append("circle")
                   .attr("cx", 10)
@@ -202,7 +310,7 @@
                   .selectAll("figcaption")
                   .data([1])
                   .enter().append("figcaption")
-                  .html("Average velocity in MPH of a pitch thrown in the MLB by season.")
+                  .html("Average velocity in MPH of a pitch thrown in the MLB by season.");
                 // Page title
                 d3.select("body")
                   .insert("h1", ":first-child")
