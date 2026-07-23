@@ -6,7 +6,17 @@
         <title>MLB Pitching Visualization</title>
         <link rel="stylesheet" href="styles.css">
     </head>
-    <body>
+    <body onload="load_data()"">
+        <script>
+            async function load_data() {
+                const data = await d3.csv("../cleaned_data/velo.csv");
+                d3.select("body")
+                  .selectAll("p")
+                  .data(data)
+                  .enter().append("p")
+                  .html(function (d, i) { return "Year: " + d.Year + " Fastball Velocity: " + d.Total4Seam;})
+            }
+        </script>
         <h1>
             CS416 Data Visualization Project: MLB Pitching Visualization
         </h1>
