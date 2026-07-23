@@ -9,7 +9,7 @@
     <body onload="load_data()"">
         <script>
             async function load_data() {
-                const data = await d3.csv("../cleaned_data/velo.csv");
+                const data = await d3.csv("velo.csv");
                 d3.select("body")
                   .selectAll("p")
                   .data(data)

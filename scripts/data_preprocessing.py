@@ -43,7 +43,7 @@ def tj_clean():
             year_data[year].append(int(line[9]))
     
 
-    tj_dest = Path(cwd, 'cleaned_data/tjdb.csv')
+    tj_dest = Path(cwd, 'docs/tjdb.csv')
     with open(tj_dest, 'w') as outfile:
         outfile.write('Year,TJSurgeries,AverageAge\n')
         for year in year_data:
@@ -99,7 +99,7 @@ def pitchers_clean():
             total = int(prev_rk)
             year_data[year] = [total, innings_sum, age_sum]
     # now write file
-    p_dest = Path(cwd, 'cleaned_data/pitchers.csv')
+    p_dest = Path(cwd, 'docs/pitchers.csv')
     with open(p_dest, 'w') as outfile:
         outfile.write('Year,TotalPitchers,AverageIP,AverageAge\n')
         for year in year_data:
@@ -146,7 +146,7 @@ def pitch_velo_clean():
                     curve.append(float(line[7]))
         year_data[year] = [fast, change, slider, curve]
     # Now process it
-    v_dest = Path(cwd, 'cleaned_data/velo.csv')
+    v_dest = Path(cwd, 'docs/velo.csv')
     with open(v_dest, 'w') as outfile:
         outfile.write('Year,Total4seam,Average4seam,TotalChange,AverageChange,TotalSlide,AverageSlide,TotalCurve,AverageCurve\n')
         for year in year_data:
