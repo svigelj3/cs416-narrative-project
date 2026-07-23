@@ -6,9 +6,10 @@
         <title>MLB Pitching Visualization</title>
         <link rel="stylesheet" href="styles.css">
     </head>
-    <body onload="load_tj_data()">
+    <body onload="load_velocity_data()">
         <figure>
             <svg class="chart"></svg>
+            <svg class="legend"></svg>
         </figure>
         
         <script>
@@ -16,18 +17,24 @@
                 return Array.from({length: end - start + 1}, 
                     (_, index) => start + index);
             }
+
             async function load_tj_data() {
                 const tj_data = await d3.csv("tjdb.csv");
-                const domain_arr = range(d3.min(tj_data, d => +d.Year), d3.max(tj_data, d => +d.Year))
-
+                // x domain is the range of years
+                const x_domain_arr = range(d3.min(tj_data, d => +d.Year), d3.max(tj_data, d => +d.Year))
+                // y domain is 0 to the max surgery val in a year
+                const y_domain_arr = [0, d3.max(tj_data, d => +d.TJSurgeries)]
+                
+                // Calculate scales
                 const x_scale = d3.scaleBand()
-                    .domain(domain_arr)
+                    .domain(x_domain_arr)
                     .range([0,1000]);
 
                 const y_scale = d3.scaleLinear()
-                    .domain([0, d3.max(tj_data, d => +d.TJSurgeries)])
+                    .domain(y_domain_arr)
                     .range([750,0]);
-
+                
+                // make the base chart
                 d3.select(".chart")
                   .attr("width", 1000 + 50)
                   .attr("height", 750 + 50)
@@ -40,6 +47,7 @@
                   .attr("x", function(d){ return x_scale(Number(d.Year)); })
                   .attr("y", function(d){ return y_scale(Number(d.TJSurgeries)); });
 
+                // add axes
                 d3.select(".chart").append("g")
                   .attr("transform", "translate(25, 25)")
                   .call(d3.axisLeft(y_scale));
@@ -48,15 +56,157 @@
                   .attr("transform", "translate(25, 775)")
                   .call(d3.axisBottom(x_scale).tickValues([1974, 1980, 1990, 2000, 2010, 2020, 2026]));
                 
+                // add caption to figure
                 d3.select("figure")
                   .selectAll("figcaption")
                   .data([1])
                   .enter().append("figcaption")
                   .html("Number of UCL Reconstruction surgeries per year in AA, AAA, and MLB Pitchers.")
 
+                //add page header
                 d3.select("body")
                   .insert("h1", ":first-child")
                   .html("Tommy John Surgeries over Time");
+            }
+
+            async function load_velocity_data() {
+                const v_data = await d3.csv("velo.csv");
+                const x_domain_arr = [d3.min(v_data, d => d.Year), d3.max(v_data, d => d.Year)]
+                const y_domain_arr = [75, 95]
+                // calculate scales
+                const x_scale = d3.scaleLinear()
+                    .domain(x_domain_arr)
+                    .range([0,1000]);
+
+                const y_scale = d3.scaleLinear()
+                    .domain(y_domain_arr)
+                    .range([750,0]);
+
+                // line helper functions
+                const fastball = d3.line()
+                    .x(d => x_scale(d.Year))
+                    .y(d => y_scale(d.Average4seam));
+                
+                const curveball = d3.line()
+                    .x(d => x_scale(d.Year))
+                    .y(d => y_scale(d.AverageCurve));
+                
+                const changeup = d3.line()
+                    .x(d => x_scale(d.Year))
+                    .y(d => y_scale(d.AverageChange));
+                
+                const slider = d3.line()
+                    .x(d => x_scale(d.Year))
+                    .y(d => y_scale(d.AverageSlide));
+
+                // define the chart
+                d3.select(".chart")
+                  .attr("width", 1000 + 50)
+                  .attr("height", 750 + 50)
+                  .append("g").attr("transform", "translate(25, 25)")
+
+                // plot the lines
+                d3.select(".chart")
+                  .append("g").attr("transform", "translate(25, 25)")
+                  .append("path")
+                  .attr("fill", "none")
+                  .attr("stroke", "firebrick")
+                  .attr("stroke-width", 3)
+                  .attr("d", fastball(v_data));
+                
+                d3.select(".chart")
+                  .append("g").attr("transform", "translate(25, 25)")
+                  .append("path")
+                  .attr("fill", "none")
+                  .attr("stroke", "steelblue")
+                  .attr("stroke-width", 3)
+                  .attr("d", changeup(v_data));
+                
+                d3.select(".chart")
+                  .append("g").attr("transform", "translate(25, 25)")
+                  .append("path")
+                  .attr("fill", "none")
+                  .attr("stroke", "goldenrod")
+                  .attr("stroke-width", 3)
+                  .attr("d", slider(v_data));
+                  
+                d3.select(".chart")
+                  .append("g").attr("transform", "translate(25, 25)")
+                  .append("path")
+                  .attr("fill", "none")
+                  .attr("stroke", "forestgreen")
+                  .attr("stroke-width", 3)
+                  .attr("d", curveball(v_data));
+
+                // plot axes
+                d3.select(".chart").append("g")
+                  .attr("transform", "translate(25, 25)")
+                  .call(d3.axisLeft(y_scale));
+                
+                d3.select(".chart").append("g")
+                  .attr("transform", "translate(25, 775)")
+                  .call(d3.axisBottom(x_scale).tickFormat(d3.format("d")));
+                
+                // build the legend
+                d3.select(".legend")
+                  .attr("width", 125)
+                  .attr("height", 90)
+                  .append("g").attr("transform", "translate(1050, 25)")
+                // Fastball
+                d3.select(".legend").append("circle")
+                  .attr("cx", 10)
+                  .attr("cy", 15)
+                  .attr("r", 5)
+                  .style("fill", "firebrick");
+                d3.select(".legend")
+                  .append("text")
+                  .attr("x", 21)
+                  .attr("y", 20)
+                  .text("4 Seam Fastball");
+                // Changeup
+                d3.select(".legend").append("circle")
+                  .attr("cx", 10)
+                  .attr("cy", 35)
+                  .attr("r", 5)
+                  .style("fill", "steelblue");
+                d3.select(".legend")
+                  .append("text")
+                  .attr("x", 21)
+                  .attr("y", 40)
+                  .text("Changeup");
+                // Slider
+                d3.select(".legend").append("circle")
+                  .attr("cx", 10)
+                  .attr("cy", 55)
+                  .attr("r", 5)
+                  .style("fill", "goldenrod");
+                d3.select(".legend")
+                  .append("text")
+                  .attr("x", 21)
+                  .attr("y", 60)
+                  .text("Slider");
+                // Curveball
+                d3.select(".legend").append("circle")
+                  .attr("cx", 10)
+                  .attr("cy", 75)
+                  .attr("r", 5)
+                  .style("fill", "forestgreen");
+                d3.select(".legend")
+                  .append("text")
+                  .attr("x", 21)
+                  .attr("y", 80)
+                  .text("Curveball");
+
+                // Caption
+                d3.select("figure")
+                  .selectAll("figcaption")
+                  .data([1])
+                  .enter().append("figcaption")
+                  .html("Average velocity in MPH of a pitch thrown in the MLB by season.")
+                // Page title
+                d3.select("body")
+                  .insert("h1", ":first-child")
+                  .html("Standard Pitch Velocities over Time");
             }
         </script>
     </body>

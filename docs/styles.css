@@ -2,3 +2,9 @@
     fill: steelblue;
     stroke: black;
 }
+
+.legend {
+    font-size: 15px;
+    border: 1px solid black;
+    alignment-baseline: middle;
+}
