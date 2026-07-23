@@ -6,7 +6,11 @@
         <title>MLB Pitching Visualization</title>
         <link rel="stylesheet" href="styles.css">
     </head>
-    <body onload="load_pitcher_data()">
+    <body>
+        <h1>Changes in MLB Pitching: A Visualization</h1>
+        <button onclick="clean_page(); load_velocity_data()">Pitcher Usage</button>
+        <button onclick="clean_page(); load_pitcher_data()">Velocity</button>
+        <button onclick="clean_page(); load_tj_data()">Tommy John</button>        
         <figure>
             <svg class="chart"></svg>
             <svg class="legend"></svg>
@@ -16,6 +20,17 @@
             function range(start, end) {
                 return Array.from({length: end - start + 1}, 
                     (_, index) => start + index);
+            }
+
+            function clean_page() {
+                const chart = document.querySelector("figure");
+                if (chart) {
+                    chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
+                }
+                const header = document.querySelector("h1");
+                if (header) {
+                    header.remove();
+                }
             }
 
             async function load_tj_data() {
