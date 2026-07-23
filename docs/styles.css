@@ -1,3 +1,4 @@
 .chart rect {
-    fill: steelblue
+    fill: steelblue;
+    stroke: black;
 }
