@@ -8,3 +8,16 @@
     border: 1px solid black;
     alignment-baseline: middle;
 }
+
+.textbox:not(:empty) {
+    border: 1px solid black;
+    border-radius: 12px;
+    position: absolute;
+    background-color: white;
+}
+
+foreignObject text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: black;
+}

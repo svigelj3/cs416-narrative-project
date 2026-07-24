@@ -8,10 +8,18 @@
     </head>
     <body>
         <h1>Changes in MLB Pitching: A Visualization</h1>
-        <button onclick="clean_page(); load_pitcher_data()">Pitcher Usage</button>
-        <button onclick="clean_page(); load_velocity_data()">Velocity</button>
-        <button onclick="clean_page(); load_tj_data()">Tommy John</button>        
         <figure>
+            <p>
+                Major League Baseball has been around since 1876. Like most things that have been around that long, 
+                the game has changed and evolved over time. In 2008, MLB began tracking individual pitch data. This 
+                became known as Statcast, and is one of the most prolific data gathering efforts we have seen in sports.
+                <br>
+                This is an interactive presentation of what we have learned and observed about pitching in MLB since 2008
+                when Statcast began to publish pitch velocity and usage information.
+                <br>
+                The presentation begins by looking at how pitcher usage has changed since 2008.
+            </p>
+            <button onclick="slide1()">Begin Presentation</button>
             <svg class="chart"></svg>
             <svg class="legend"></svg>
         </figure>
@@ -31,6 +39,10 @@
                 if (header) {
                     header.remove();
                 }
+            }
+
+            function clean_textbox() {
+                d3.select(".textbox").remove();
             }
 
             async function load_tj_data() {
@@ -178,13 +190,6 @@
                   .attr("x", 21)
                   .attr("y", 40)
                   .text("Total Pitchers");
-                
-                // add caption to figure
-                d3.select("figure")
-                  .selectAll("figcaption")
-                  .data([1])
-                  .enter().append("figcaption")
-                  .html("Bars indicate total number of Pitchers used in an MLB season.\nLine indicates the Average Innings Pitched per pitcher used in the same MLB season.")
 
                 //add page header
                 d3.select("body")
@@ -331,6 +336,90 @@
                   .insert("h1", ":first-child")
                   .html("Standard Pitch Velocities over Time");
             }
+        
+            function generate_textbox(display_text, window_size, window_coords, button_obj) {
+                const window_w = window_size[0];
+                const window_h = window_size[1];
+                d3.select("figure")
+                  .insert("svg", ":first-child").attr("class", "textbox")
+                  .attr("width", window_size[0])
+                  .attr("height", window_size[1])
+                  .style("left", window_coords[0])
+                  .style("top", window_coords[1]);
+                
+                const text_w = window_w - 14;
+                const text_h = window_h - 20;
+                d3.select(".textbox")
+                  .append("foreignObject")
+                  .attr("x", 7).attr("y", 10)
+                  .attr("width", text_w).attr("height", text_h)
+                  .append("xhtml:text")
+                  .text(display_text);
+                
+                if (button_obj) {
+                    const button_x = (text_w - button_obj.width) / 2;
+                    const button_y = text_h - button_obj.height + 5;
+                    d3.select(".textbox")
+                      .append("foreignObject")
+                      .attr("x", button_x).attr("y", button_y)
+                      .attr("width", button_obj.width).attr("height", button_obj.height)
+                      .append("xhtml:button")
+                      .text(button_obj.text)
+                      .attr("onclick", button_obj.fn);
+                }
+            }
+
+            async function slide1() {
+                clean_page();
+                load_pitcher_data();
+                const box_text = `
+                    This chart shows how the number of pitchers has changed overtime, alongside how many innings each pitcher throws on average.
+                    Since 2008, the usage has steadily grown year over year, showing that the days of high-endurance starters throwing complete games have passed.
+                    The modern game favors bullpen usage. Analytics indicate that it is harder for opposing batters to produce when the pitcher is new.
+                `;
+                const next_button = {
+                    "width": 44,
+                    "height": 21,
+                    "text": "Next",
+                    "fn": "slide1a();"
+                };
+                generate_textbox(box_text, [400, 225], [350, 325], next_button);    
+            }
+
+            function slide1a() {
+                clean_textbox();
+                const box_text = `
+                    The bars indicate the total number of pitchers used in a season.
+                    This includes starters, relievers, and the rare case when a position player comes in to pitch in relief.
+                    In 2008, around 650 unique pitchers made an appearance. Last season in 2025, that number ballooned to around 875.
+                    Note that in the COVID-19 impacted season of 2020, we still observed more pitchers than in 2008, showing how much the strategy has shifted.
+                `;
+                const next_button = {
+                    "width": 44,
+                    "height": 21,
+                    "text": "Next",
+                    "fn": "slide1b();"
+                };
+                generate_textbox(box_text, [400, 225], [100, 85], next_button); 
+            }
+
+            function slide1b() {
+                clean_textbox();
+                const box_text = `
+                    The line indicates the average innings pitched per pitcher that season.
+                    The downward trend is quite intutive, because we can see the number of pitchers drastically grow, and the length of the game has maintained steadily at 9 innings per game.
+                    The MLB season has been set at 162 games per team since 1961 after the American League expanded. The only contradiction to this was in the COVID-19 impacted 2020 season, where only 60 games were played per team.
+                    This creates an interesting outlier when observing this metric calculated in this way.          
+                `;
+                const next_button = {
+                    "width": 85,
+                    "height": 21,
+                    "text": "Next Slide",
+                    "fn": "clean_page(); load_velocity_data()"
+                };
+                generate_textbox(box_text, [475, 225], [125, 525], next_button); 
+            }
+
         </script>
     </body>
 </html>
