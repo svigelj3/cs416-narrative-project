@@ -20,6 +20,7 @@
                 The presentation begins by looking at how pitcher usage has changed since 2008.
             </p>
             <button onclick="slide1()">Begin Presentation</button>
+            <button onclick="slide2()">Skip to slide 2</button>
             <svg class="chart"></svg>
             <svg class="legend"></svg>
         </figure>
@@ -325,12 +326,6 @@
                   .attr("y", 80)
                   .text("Curveball");
 
-                // Caption
-                d3.select("figure")
-                  .selectAll("figcaption")
-                  .data([1])
-                  .enter().append("figcaption")
-                  .html("Average velocity in MPH of a pitch thrown in the MLB by season.");
                 // Page title
                 d3.select("body")
                   .insert("h1", ":first-child")
@@ -415,9 +410,101 @@
                     "width": 85,
                     "height": 21,
                     "text": "Next Slide",
-                    "fn": "clean_page(); load_velocity_data()"
+                    "fn": "slide2();"
                 };
                 generate_textbox(box_text, [475, 225], [125, 525], next_button); 
+            }
+
+            async function slide2() {
+                clean_page();
+                load_velocity_data();
+                const box_text = `
+                    Since 2008, when Statcast began to publish pitch usage data, among the most common pitches have been the 4 Seam Fastball, Changeup, Slider, and Curveball. 
+                    The 4 Seam Fastball is the standard pitch, relying on velocity and location to best the batter. 
+                    A Changeup uses deception of the same arm motion as a fastball, yet drastically lower velocity. This is called an "offspeed" pitch. 
+                    The Slider and Curveball use spin to have horizontal (Slider) or vertical (Curveball) movement when compared to the fastball, which doesn't move much. These are referred to as "breaking balls". 
+                    A pitcher may use some, all or none of these 4 pitches, as other pitch types and hybrids exist, but almost all pitchers use some combination of fastballs, offspeeds, and breaking balls.
+                `;
+                const next_button = {
+                    "width": 44,
+                    "height": 21,
+                    "text": "Next",
+                    "fn": "slide2a();"
+                };
+                generate_textbox(box_text, [500, 300], [350, 300], next_button); 
+            }
+
+            function slide2a() {
+                clean_textbox();
+                const box_text = `
+                    This red line indicates the change in average 4 Seam Fastball velocity over time.
+                    In 2008, the average 4 seamer clocked 91.6 MPH. Last year in 2025, that was up to 94.5, with some pitchers averaging 100 MPH or more.
+                    Note that this line is not the fastest ball thrown that season, but rather the average pitch velocity.
+                `;
+                const next_button = {
+                    "width": 44,
+                    "height": 21,
+                    "text": "Next",
+                    "fn": "slide2b();"
+                };
+                generate_textbox(box_text, [600, 125], [300, 215], next_button); 
+            }
+
+            function slide2b() {
+                clean_textbox();
+                const box_text = `
+                    The blue line indicates the change in average Changeup velocity over time, and the yellow line the Slider.
+                    From 2008 to 2016 these pitchese were quite similar in velocity, but after 2016 the slider tended slower.
+                    This is interesting because in 2015, Statcast began publishing Spin Rate statistics. 
+                    This could potentially imply that after those statistics became available, pitchers began focusing on spinning their sliders for more break and less velocity, but since we dont have the data since 2008, we can't say that for sure.
+                    In any case, both pitches are still being thrown faster now than before.
+                `;
+                const next_button = {
+                    "width": 44,
+                    "height": 21,
+                    "text": "Next",
+                    "fn": "slide2c();"
+                };
+                generate_textbox(box_text, [600, 200], [300, 225], next_button); 
+            }
+
+            function slide2c() {
+                clean_textbox();
+                const box_text = `
+                    The green line is the change in average Curveball velocity. This is the slowest pitch of these four.
+                    The Curveball's emphasis on spin and vertical movement mean that throwing it hard is not necessarily as important as throwing it properly.
+                    Its average velocity has increased from 76.3 MPH in 2008 to 79.7 last year in 2025.
+                `;
+                const next_button = {
+                    "width": 44,
+                    "height": 21,
+                    "text": "Next",
+                    "fn": "slide2d();"
+                };
+                generate_textbox(box_text, [425, 165], [400, 540], next_button); 
+            }
+
+            function slide2d() {
+                clean_textbox();
+                const box_text = `
+                    All 4 of these lines show the same trend: Since 2008, pitches are coming in faster and faster.
+                    When combined with the previous trend of more pitchers being used per game, the strategy shift becomes very clear.
+                    Use more pitchers, so each pitcher needs to throw for less innings, meaning they can throw harder on every pitch.
+                    This means the fastballs will be faster, the breaking balls will have more break, and the batters will have a harder time hitting the ball.
+                    However, this doesn't come without consequence.
+                `;
+                const next_button = {
+                    "width": 85,
+                    "height": 21,
+                    "text": "Next Slide",
+                    "fn": "slide3();"
+                };
+                generate_textbox(box_text, [600, 200], [300, 225], next_button); 
+            }
+
+            async function slide3() {
+                clean_page();
+                load_tj_data();
             }
 
         </script>
