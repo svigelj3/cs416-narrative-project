@@ -48,6 +48,16 @@
                 d3.select(".textbox").remove();
             }
 
+            function lookup(key, value, data) {
+                let result = {};
+                data.forEach(json_obj => {
+                    if (json_obj[key] == value) {
+                        result = json_obj;
+                    }
+                });
+                return result;
+            }
+
             async function load_tj_data(interactive) {
                 const chart = document.querySelector("figure");
                 if (chart) {
@@ -188,7 +198,22 @@
                   .attr("fill", "none")
                   .attr("stroke", "firebrick")
                   .attr("stroke-width", 3)
-                  .attr("d", innings(p_data));
+                  .attr("d", innings(p_data))
+                  .on("mouseover", function(event, d) {
+                    if (interactive) {
+                        const year = Math.round(x_scale_i.invert(d3.pointer(event)[0]));
+                        const entry = lookup("Year", year, p_data)
+                        const inn_p = entry.AverageIP
+                        const tooltip = `Year: ${year}
+                        Average Innings Pitched: ${inn_p}`;
+                        generate_textbox(tooltip, [200, 100], d3.pointer(event));
+                    }
+                  })
+                  .on("mouseout", function(event, d) {
+                    if (interactive) {
+                        clean_textbox();
+                    }
+                  });
                 
                 // add axes
                 d3.select(".chart").append("g")
@@ -291,7 +316,22 @@
                   .attr("fill", "none")
                   .attr("stroke", "firebrick")
                   .attr("stroke-width", 3)
-                  .attr("d", fastball(v_data));
+                  .attr("d", fastball(v_data))
+                  .on("mouseover", function(event, d) {
+                    if (interactive) {
+                        const year = Math.round(x_scale.invert(d3.pointer(event)[0]));
+                        const entry = lookup("Year", year, v_data)
+                        const fast = entry.Average4seam
+                        const tooltip = `Year: ${year}
+                        Average Fastball Velocity: ${fast}`;
+                        generate_textbox(tooltip, [200, 100], d3.pointer(event));
+                    }
+                  })
+                  .on("mouseout", function(event, d) {
+                    if (interactive) {
+                        clean_textbox();
+                    }
+                  });
                 
                 d3.select(".chart")
                   .append("g").attr("transform", "translate(25, 25)")
@@ -299,7 +339,22 @@
                   .attr("fill", "none")
                   .attr("stroke", "steelblue")
                   .attr("stroke-width", 3)
-                  .attr("d", changeup(v_data));
+                  .attr("d", changeup(v_data))
+                  .on("mouseover", function(event, d) {
+                    if (interactive) {
+                        const year = Math.round(x_scale.invert(d3.pointer(event)[0]));
+                        const entry = lookup("Year", year, v_data)
+                        const change = entry.AverageChange
+                        const tooltip = `Year: ${year}
+                        Average Changeup Velocity: ${change}`;
+                        generate_textbox(tooltip, [200, 100], d3.pointer(event));
+                    }
+                  })
+                  .on("mouseout", function(event, d) {
+                    if (interactive) {
+                        clean_textbox();
+                    }
+                  });
                 
                 d3.select(".chart")
                   .append("g").attr("transform", "translate(25, 25)")
@@ -307,7 +362,22 @@
                   .attr("fill", "none")
                   .attr("stroke", "goldenrod")
                   .attr("stroke-width", 3)
-                  .attr("d", slider(v_data));
+                  .attr("d", slider(v_data))
+                  .on("mouseover", function(event, d) {
+                    if (interactive) {
+                        const year = Math.round(x_scale.invert(d3.pointer(event)[0]));
+                        const entry = lookup("Year", year, v_data)
+                        const slide = entry.AverageSlide
+                        const tooltip = `Year: ${year}
+                        Average Slider Velocity: ${slide}`;
+                        generate_textbox(tooltip, [200, 100], d3.pointer(event));
+                    }
+                  })
+                  .on("mouseout", function(event, d) {
+                    if (interactive) {
+                        clean_textbox();
+                    }
+                  });
                   
                 d3.select(".chart")
                   .append("g").attr("transform", "translate(25, 25)")
@@ -315,7 +385,22 @@
                   .attr("fill", "none")
                   .attr("stroke", "forestgreen")
                   .attr("stroke-width", 3)
-                  .attr("d", curveball(v_data));
+                  .attr("d", curveball(v_data))
+                  .on("mouseover", function(event, d) {
+                    if (interactive) {
+                        const year = Math.round(x_scale.invert(d3.pointer(event)[0]));
+                        const entry = lookup("Year", year, v_data)
+                        const curve = entry.AverageCurve
+                        const tooltip = `Year: ${year}
+                        Average Curveball Velocity: ${curve}`;
+                        generate_textbox(tooltip, [200, 100], d3.pointer(event));
+                    }
+                  })
+                  .on("mouseout", function(event, d) {
+                    if (interactive) {
+                        clean_textbox();
+                    }
+                  });
 
                 // plot axes
                 d3.select(".chart").append("g")
