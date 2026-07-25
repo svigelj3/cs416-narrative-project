@@ -15,12 +15,12 @@
                 became known as Statcast, and is one of the most prolific data gathering efforts we have seen in sports.
                 <br>
                 This is an interactive presentation of what we have learned and observed about pitching in MLB since 2008
-                when Statcast began to publish pitch velocity and usage information.
+                when Statcast began to publish pitch velocity and pitch type information.
                 <br>
-                The presentation begins by looking at how pitcher usage has changed since 2008.
+                The presentation begins by looking at how the number of pitchers used per season has changed since 2008.
             </p>
             <button onclick="slide1()">Begin Presentation</button>
-            <button onclick="explore_tj()">Skip to Explore</button>
+            <button onclick="explore_tj()">DEBUG Skip to Explore</button> 
         </figure>
         
         <script>
@@ -48,7 +48,7 @@
                 d3.select(".textbox").remove();
             }
 
-            async function load_tj_data() {
+            async function load_tj_data(interactive) {
                 const chart = document.querySelector("figure");
                 if (chart) {
                     chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
@@ -79,7 +79,21 @@
                   .attr("width", x_scale.bandwidth)
                   .attr("height", function(d){ return 750 - y_scale(d.TJSurgeries); })
                   .attr("x", function(d){ return x_scale(Number(d.Year)); })
-                  .attr("y", function(d){ return y_scale(Number(d.TJSurgeries)); });
+                  .attr("y", function(d){ return y_scale(Number(d.TJSurgeries)); })
+                  .on("mouseover", function(event, d) {
+                    if (interactive) {
+                        const tooltip = `Season: ${d.Year}
+                        Number of Surgeries: ${d.TJSurgeries}
+                        Average Age: ${d.AverageAge}
+                        `;
+                        generate_textbox(tooltip, [200, 100], d3.pointer(event));
+                    }
+                  })
+                  .on("mouseout", function(event, d) {
+                    if (interactive) {
+                        clean_textbox();
+                    }
+                });
 
                 // add axes
                 d3.select(".chart").append("g")
@@ -98,12 +112,12 @@
 
             async function explore_tj() {
                 clean_page();
-                load_tj_data();
+                load_tj_data(true);
                 explore_buttons();
                 const tj_data = await d3.csv("tjdb.csv");
             }
 
-            async function load_pitcher_data() {
+            async function load_pitcher_data(interactive) {
                 const chart = document.querySelector("figure");
                 if (chart) {
                     chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
@@ -134,7 +148,8 @@
                 const y_scale_i = d3.scaleLinear()
                     .domain(y_domain_arr_i)
                     .range([750,0]);
-                
+
+                const tooltip = d3.select("#tooltip")
                 // make the bar chart
                 d3.select(".chart")
                   .attr("width", 1000 + 50)
@@ -146,7 +161,21 @@
                   .attr("width", x_scale_p.bandwidth)
                   .attr("height", function(d){ return 750 - y_scale_p(d.TotalPitchers); })
                   .attr("x", function(d){ return x_scale_p(Number(d.Year)); })
-                  .attr("y", function(d){ return y_scale_p(Number(d.TotalPitchers)); });
+                  .attr("y", function(d){ return y_scale_p(Number(d.TotalPitchers)); })
+                  .on("mouseover", function(event, d) {
+                    if (interactive) {
+                        const tooltip = `Season: ${d.Year}
+                        Pitchers Used: ${d.TotalPitchers}
+                        Average Age: ${d.AverageAge}
+                        `;
+                        generate_textbox(tooltip, [200, 100], d3.pointer(event));
+                    }
+                  })
+                  .on("mouseout", function(event, d) {
+                    if (interactive) {
+                        clean_textbox();
+                    }
+                  });
 
                 // make and plot the line but need to add the offset for the bar
                 const innings = d3.line()
@@ -210,12 +239,12 @@
 
             async function explore_pitcher() {
                 clean_page();
-                load_pitcher_data();
+                load_pitcher_data(true);
                 explore_buttons();
                 const p_data = await d3.csv("pitchers.csv");
             }
 
-            async function load_velocity_data() {
+            async function load_velocity_data(interactive) {
                 const chart = document.querySelector("figure");
                 if (chart) {
                     chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
@@ -355,7 +384,7 @@
         
             async function explore_velo() {
                 clean_page();
-                load_velocity_data();
+                load_velocity_data(true);
                 explore_buttons();
                 const v_data = await d3.csv("velo.csv");
             }
@@ -394,7 +423,7 @@
 
             async function slide1() {
                 clean_page();
-                load_pitcher_data();
+                load_pitcher_data(false);
                 const box_text = `
                     This chart shows how the number of pitchers has changed overtime, alongside how many innings each pitcher throws on average.
                     Since 2008, the usage has steadily grown year over year, showing that the days of high-endurance starters throwing complete games have passed.
@@ -445,7 +474,7 @@
 
             async function slide2() {
                 clean_page();
-                load_velocity_data();
+                load_velocity_data(false);
                 const box_text = `
                     Since 2008, when Statcast began to publish pitch usage data, among the most common pitches have been the 4 Seam Fastball, Changeup, Slider, and Curveball. 
                     The 4 Seam Fastball is the standard pitch, relying on velocity and location to best the batter. 
@@ -532,7 +561,7 @@
 
             async function slide3() {
                 clean_page();
-                load_tj_data();
+                load_tj_data(false);
 
                 const box_text = `
                     This chart shows the amount of ulnar collateral ligament (UCL) Reconstruction surgeries that have taken place over time.
