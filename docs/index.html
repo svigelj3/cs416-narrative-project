@@ -20,9 +20,7 @@
                 The presentation begins by looking at how pitcher usage has changed since 2008.
             </p>
             <button onclick="slide1()">Begin Presentation</button>
-            <button onclick="slide3()">Skip to slide 3</button>
-            <svg class="chart"></svg>
-            <svg class="legend"></svg>
+            <button onclick="explore_tj()">Skip to Explore</button>
         </figure>
         
         <script>
@@ -34,11 +32,15 @@
             function clean_page() {
                 const chart = document.querySelector("figure");
                 if (chart) {
-                    chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
+                    chart.innerHTML = "";
                 }
                 const header = document.querySelector("h1");
                 if (header) {
                     header.remove();
+                }
+                const buttons = document.querySelector("div");
+                if (buttons) {
+                    buttons.remove();
                 }
             }
 
@@ -47,6 +49,10 @@
             }
 
             async function load_tj_data() {
+                const chart = document.querySelector("figure");
+                if (chart) {
+                    chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
+                }
                 const tj_data = await d3.csv("tjdb.csv");
                 // x domain is the range of years
                 const x_domain_arr = range(d3.min(tj_data, d => +d.Year), d3.max(tj_data, d => +d.Year));
@@ -90,7 +96,18 @@
                   .html("UCL Reconstruction Surgeries over Time");
             }
 
+            async function explore_tj() {
+                clean_page();
+                load_tj_data();
+                explore_buttons();
+                const tj_data = await d3.csv("tjdb.csv");
+            }
+
             async function load_pitcher_data() {
+                const chart = document.querySelector("figure");
+                if (chart) {
+                    chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
+                }
                 const p_data = await d3.csv("pitchers.csv");
                 // x domain is the range of years
                 const x_domain_arr_p = range(d3.min(p_data, d => +d.Year), d3.max(p_data, d => +d.Year));
@@ -191,7 +208,18 @@
                   .html("Pitcher Usage over Time");
             }
 
+            async function explore_pitcher() {
+                clean_page();
+                load_pitcher_data();
+                explore_buttons();
+                const p_data = await d3.csv("pitchers.csv");
+            }
+
             async function load_velocity_data() {
+                const chart = document.querySelector("figure");
+                if (chart) {
+                    chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
+                }
                 const v_data = await d3.csv("velo.csv");
                 const x_domain_arr = [d3.min(v_data, d => d.Year), d3.max(v_data, d => d.Year)];
                 const y_domain_arr = [75, 95];
@@ -325,6 +353,13 @@
                   .html("Standard Pitch Velocities over Time");
             }
         
+            async function explore_velo() {
+                clean_page();
+                load_velocity_data();
+                explore_buttons();
+                const v_data = await d3.csv("velo.csv");
+            }
+
             function generate_textbox(display_text, window_size, window_coords, button_obj) {
                 const window_w = window_size[0];
                 const window_h = window_size[1];
@@ -592,9 +627,114 @@
                     "width": 65,
                     "height": 21,
                     "text": "Explore!",
-                    "fn": "slide1();"
+                    "fn": "explore_tj();"
                 };
                 generate_textbox(box_text, [600, 235], [300, 225], next_button); 
+            }
+
+            function explore_buttons() {
+                d3.select("body")
+                  .insert("div", ":first-child")
+                  .attr("class", "button-bar")
+                
+                d3.select(".button-bar")
+                  .append("button")
+                  .attr("id", "pitchers-button") 
+                  .attr("onclick", "explore_pitcher()")
+                  .html("Pitchers");
+
+                d3.select(".button-bar")
+                  .append("button")
+                  .attr("id", "velo-button")
+                  .attr("onclick", "explore_velo()")
+                  .html("Velocity");
+
+                d3.select(".button-bar")
+                  .append("button")
+                  .attr("id", "tj-button")
+                  .attr("onclick", "explore_tj()")
+                  .html("Tommy John");
+
+                d3.select(".button-bar")
+                  .append("button")
+                  .attr("id", "home-button")
+                  .attr("onclick", "home()")
+                  .html("Return to Home");
+            }
+
+            function home() {
+                // This will return to the home page except since the presentation was already completed once
+                // the explore options will still be open
+                // alongside sources and an option to restart the presentation
+                clean_page();
+                explore_buttons();
+                // we are at home so remove that button
+                d3.select("#home-button").remove();
+                // Page title
+                d3.select("body")
+                  .insert("h1", ":first-child")
+                  .html("Changes in MLB Pitching: A Visualization");
+
+                d3.select("figure")
+                  .append("p")
+                  .html(`
+                    Thank you for viewing this interactive presentation about the changes in pitching strategy in MLB over recent years.
+                    I hope the visualizations informed how the strategy has shifted towards using many pitchers who throw harder.
+                    <br>
+                    Use the buttons above to resume exploring the charts.
+                    <br>
+                    Use the buttons below to view the presentation again from the beginning or view the Sources page.
+                  `);
+                d3.select("figure")
+                  .append("button")
+                  .html("Begin Presentation")
+                  .attr("onclick", "slide1()");
+                
+                d3.select("figure")
+                  .append("button")
+                  .html("View Sources")
+                  .attr("onclick", "sources()");
+            }
+
+            function sources() {
+                clean_page();
+                explore_buttons();
+                // get links to open in new tab
+                d3.select("head")
+                  .append("base")
+                  .attr("target", "_blank");
+                
+                d3.select("figure")
+                  .append("p")
+                  .html(`
+                    Welcome to the sources page. This page includes the sources of the public datasets I used for these visualizations, and some helpful links for some more information. 
+                    <br><br>
+                    <strong>Standard Pitching Statistics</strong> <a href=https://www.baseball-reference.com/leagues/majors/2025-standard-pitching.shtml>Link to Dataset</a><br>
+                    - Hosted by Baseball Reference<br>
+                    - This dataset contains the standard pitching statistics for every pitcher that appeared at least once over a given season.<br>
+                    - Cleaning/Preprocessing output: The total pitchers used in MLB and the average age and innings pitched per pitcher per year.<br>
+                    
+                    <strong>Statcast Statistics - Pitch Arsenal</strong> <a href=https://baseballsavant.mlb.com/leaderboard/pitch-arsenals?year=2025&min=q&type=avg_speed&hand=>Link to Dataset</a><br>
+                    - Hosted by Baseball Savant<br>
+                    - This dataset contains the average pitch velocity per pitch type per pitcher over a given MLB season. This is limited to a Qualified minimum pitch count per pitch type of 2.5 pitches per team game (a pitcher may not play every team game)<br>
+                    - Cleaning/Preprocessing output: Average velocity and number of qualified users per year for 4-seam fastball, Changeup, Slider, and Curveball pitch types in MLB.<br>
+
+                    <strong>Tommy John Database</strong> <a href=https://docs.google.com/spreadsheets/d/1gQujXQQGOVNaiuwSN680Hq-FDVsCwvN-3AazykOBON0/edit?usp=sharing>Link to Dataset</a><br>
+                    - Cloned locally July 19, 2026 <br>
+                    - This database is a compilation of Tommy John surgeries for MLB-associated players that have been confirmed through a published media report of some kind. This is not a completely exhaustive list, as some teams are guarded about releasing TJ related information, and some TJ surgeries go completely unreported. However, this is the most comprehensive single source available online, and considered by the public to be the best resource.<br>
+                    - Cleaning/Preprocessing output: Average age per TJ recipient and number of recipients per year, filtering only for AA, AAA, and MLB Pitchers.<br>
+        
+                    <strong>Github Repo</strong> <a href=https://github.com/svigelj3/cs416-narrative-project/tree/main/scripts>GitHub Repository</a><br>
+                    As mentioned above, I did some pre-processing to extract the information I used for these charts and tooltips. See the github page to view that script.<br>
+                    
+                    <br><strong>Helpful Links</strong><br><br>
+                    <strong>Major League Baseball</strong> <a href=https://mlb.com>Link to Webpage</a><br>
+                    <strong>Baseball Glossary</strong> <a href=https://www.mlb.com/glossary>Link to Webpage</a><br>
+                    <strong>Tommy John Surgery Wikipedia Page</strong> <a href=https://en.wikipedia.org/wiki/Ulnar_collateral_ligament_reconstruction>Link to Webpage</a><br>
+                
+                    <br><br>
+                    Disclaimer: All opinions and analysis of this presentation are that of my own and are intended for educational purposes only
+                `);
             }
 
         </script>
