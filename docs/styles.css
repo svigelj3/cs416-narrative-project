@@ -1,3 +1,46 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+h1 {
+    margin-left: 50px;
+}
+
+p {
+    margin-left: 25px;
+}
+
+figure {
+    margin-left: 50px;
+}
+
+button {
+    border: 2px solid black;
+    border-radius: 6px;
+    background-color: lightgray;
+}
+
+button:hover {
+    background-color: slategray;
+}
+
+.begin-button, foreignObject button {
+    display: block;
+    margin: 0 auto;
+}
+
+.button-bar {
+    margin-left: 50px;
+    display: flex;
+    gap: 3px;
+}
+
+.bottom-button-bar {
+    display: flex;
+    gap: 3px;
+}
+
 .chart rect {
     fill: steelblue;
     stroke: black;
@@ -7,6 +50,7 @@
     font-size: 15px;
     border: 1px solid black;
     alignment-baseline: middle;
+    background-color: white;
 }
 
 .textbox:not(:empty) {

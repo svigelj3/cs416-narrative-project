@@ -19,14 +19,14 @@
                 <br>
                 The presentation begins by looking at how the number of pitchers used per season has changed since 2008.
             </p>
-            <button onclick="slide1()">Begin Presentation</button>
+            <button onclick="slide1()" class="begin-button">Begin Presentation</button>
             <button onclick="explore_tj()">DEBUG Skip to Explore</button> 
         </figure>
         
         <script>
 
             const chart_width = window.innerWidth * .75;
-            const chart_height = window.innerHeight * .75;
+            const chart_height = window.innerHeight * .70;
             const chart_margin = 25;
             function range(start, end) {
                 return Array.from({length: end - start + 1}, 
@@ -65,7 +65,7 @@
             async function load_tj_data(interactive) {
                 const chart = document.querySelector("figure");
                 if (chart) {
-                    chart.innerHTML = "<svg class=\"chart\"></svg><svg class=\"legend\"></svg>";
+                    chart.innerHTML = "<svg class=\"chart\"></svg>";
                 }
                 const tj_data = await d3.csv("tjdb.csv");
                 // x domain is the range of years
@@ -258,7 +258,7 @@
                 d3.select(".legend")
                   .attr("width", 125)
                   .attr("height", 50)
-                  .append("g").attr("transform", "`translate(${chart_width+2*chart_margin}, ${chart_margin})`");
+                  .append("g").attr("transform", `translate(${chart_width+2*chart_margin}, ${chart_margin})`);
                 // Line
                 d3.select(".legend").append("circle")
                   .attr("cx", 10)
@@ -478,7 +478,7 @@
                 d3.select(".legend")
                   .attr("width", 125)
                   .attr("height", 90)
-                  .append("g").attr("transform", "`translate(${chart_width+2*chart_margin}, ${chart_margin})`");
+                  .append("g").attr("transform", `translate(${chart_width+2*chart_margin}, ${chart_margin})`);
                 // Fastball
                 d3.select(".legend").append("circle")
                   .attr("cx", 10)
@@ -544,8 +544,8 @@
                   .insert("svg", ":first-child").attr("class", "textbox")
                   .attr("width", window_size[0])
                   .attr("height", window_size[1])
-                  .style("left", window_coords[0])
-                  .style("top", window_coords[1]);
+                  .style("left", window_coords[0] + chart_margin)
+                  .style("top", window_coords[1] + chart_margin);
                 
                 const text_w = window_w - 14;
                 const text_h = window_h - 20;
@@ -583,7 +583,7 @@
                     "text": "Next",
                     "fn": "slide1a();"
                 };
-                generate_textbox(box_text, [400, 225], [350, 325], next_button);    
+                generate_textbox(box_text, [400, 235], [.35*chart_width, .43*chart_height], next_button);    
             }
 
             function slide1a() {
@@ -600,7 +600,7 @@
                     "text": "Next",
                     "fn": "slide1b();"
                 };
-                generate_textbox(box_text, [400, 225], [100, 85], next_button); 
+                generate_textbox(box_text, [400, 250], [.15*chart_width, .15*chart_height], next_button); 
             }
 
             function slide1b() {
@@ -617,7 +617,7 @@
                     "text": "Next Slide",
                     "fn": "slide2();"
                 };
-                generate_textbox(box_text, [475, 225], [125, 525], next_button); 
+                generate_textbox(box_text, [475, 250], [.125*chart_width, .6*chart_height], next_button); 
             }
 
             async function slide2() {
@@ -636,7 +636,7 @@
                     "text": "Next",
                     "fn": "slide2a();"
                 };
-                generate_textbox(box_text, [500, 300], [350, 300], next_button); 
+                generate_textbox(box_text, [500, 320], [.35*chart_width, .4*chart_height], next_button); 
             }
 
             function slide2a() {
@@ -652,7 +652,7 @@
                     "text": "Next",
                     "fn": "slide2b();"
                 };
-                generate_textbox(box_text, [600, 125], [300, 215], next_button); 
+                generate_textbox(box_text, [600, 150], [.3*chart_width, .25*chart_height], next_button); 
             }
 
             function slide2b() {
@@ -670,7 +670,7 @@
                     "text": "Next",
                     "fn": "slide2c();"
                 };
-                generate_textbox(box_text, [600, 200], [300, 225], next_button); 
+                generate_textbox(box_text, [600, 225], [.3*chart_width, .30*chart_height], next_button); 
             }
 
             function slide2c() {
@@ -686,7 +686,7 @@
                     "text": "Next",
                     "fn": "slide2d();"
                 };
-                generate_textbox(box_text, [425, 165], [400, 540], next_button); 
+                generate_textbox(box_text, [425, 185], [.4*chart_width, .66*chart_height], next_button); 
             }
 
             function slide2d() {
@@ -704,7 +704,7 @@
                     "text": "Next Slide",
                     "fn": "slide3();"
                 };
-                generate_textbox(box_text, [600, 200], [300, 225], next_button); 
+                generate_textbox(box_text, [600, 200], [.3*chart_width, .25*chart_height], next_button); 
             }
 
             async function slide3() {
@@ -724,7 +724,7 @@
                     "text": "Next",
                     "fn": "slide3a();"
                 };
-                generate_textbox(box_text, [600, 200], [300, 225], next_button); 
+                generate_textbox(box_text, [600, 225], [.3*chart_width, .25*chart_height], next_button); 
             }
 
             function slide3a() {
@@ -740,7 +740,7 @@
                     "text": "Next",
                     "fn": "slide3b();"
                 };
-                generate_textbox(box_text, [425, 165], [80, 550], next_button); 
+                generate_textbox(box_text, [425, 195], [.08*chart_width, .7*chart_height], next_button); 
             }
 
             function slide3b() {
@@ -755,7 +755,7 @@
                     "text": "Next",
                     "fn": "slide3c();"
                 };
-                generate_textbox(box_text, [375, 145], [140, 525], next_button); 
+                generate_textbox(box_text, [375, 150], [.11*chart_width, .63*chart_height], next_button); 
             }
 
             function slide3c() {
@@ -771,7 +771,7 @@
                     "text": "Next",
                     "fn": "slide3d();"
                 };
-                generate_textbox(box_text, [425, 160], [245, 395], next_button); 
+                generate_textbox(box_text, [425, 175], [.24*chart_width, .50*chart_height], next_button); 
             }
 
             function slide3d() {
@@ -787,7 +787,7 @@
                     "text": "Next",
                     "fn": "slide3e();"
                 };
-                generate_textbox(box_text, [475, 170], [295, 270], next_button); 
+                generate_textbox(box_text, [475, 200], [.24*chart_width, .36*chart_height], next_button); 
             }
 
             function slide3e() {
@@ -801,12 +801,12 @@
                     Use the button to go to the explore home page, where the three interactive charts are linked, to learn more about how pitching has changed in MLB.
                 `;
                 const next_button = {
-                    "width": 65,
+                    "width": 118,
                     "height": 22,
-                    "text": "Explore!",
+                    "text": "End Presentation",
                     "fn": "home();"
                 };
-                generate_textbox(box_text, [600, 235], [300, 225], next_button); 
+                generate_textbox(box_text, [600, 275], [.32*chart_width, .3*chart_height], next_button); 
             }
 
             function explore_buttons() {
@@ -847,6 +847,7 @@
                 explore_buttons();
                 // we are at home so remove that button
                 d3.select("#home-button").remove();
+
                 // Page title
                 d3.select("body")
                   .insert("h1", ":first-child")
@@ -862,12 +863,17 @@
                     <br>
                     Use the buttons below to view the presentation again from the beginning or view the Sources page.
                   `);
+
                 d3.select("figure")
+                  .append("div")
+                  .attr("class", "bottom-button-bar")
+                
+                d3.select(".bottom-button-bar")
                   .append("button")
                   .html("Begin Presentation")
                   .attr("onclick", "slide1()");
                 
-                d3.select("figure")
+                d3.select(".bottom-button-bar")
                   .append("button")
                   .html("View Sources")
                   .attr("onclick", "sources()");
@@ -881,6 +887,11 @@
                   .append("base")
                   .attr("target", "_blank");
                 
+                // Page title
+                d3.select("body")
+                  .insert("h1", ":first-child")
+                  .html("Sources and Helpful Links");
+
                 d3.select("figure")
                   .append("p")
                   .html(`
