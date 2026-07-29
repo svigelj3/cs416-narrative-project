@@ -98,7 +98,6 @@
                     if (interactive) {
                         const tooltip = `Season: ${d.Year}
                         Number of Surgeries: ${d.TJSurgeries}
-                        Average Age: ${d.AverageAge}
                         `;
                         generate_textbox(tooltip, [200, 100], d3.pointer(event));
                         d3.select(this)
@@ -186,7 +185,6 @@
                     if (interactive) {
                         const tooltip = `Season: ${d.Year}
                         Pitchers Used: ${d.TotalPitchers}
-                        Average Age: ${d.AverageAge}
                         `;
                         generate_textbox(tooltip, [200, 100], d3.pointer(event));
                         d3.select(this)
@@ -913,7 +911,7 @@
                     - Cleaning/Preprocessing output: Average age per TJ recipient and number of recipients per year, filtering only for AA, AAA, and MLB Pitchers.<br>
         
                     <strong>Github Repo</strong> <a href=https://github.com/svigelj3/cs416-narrative-project/tree/main/scripts>GitHub Repository</a><br>
-                    As mentioned above, I did some pre-processing to extract the information I used for these charts and tooltips. See the github page to view that script.<br>
+                    As mentioned above, I did some pre-processing to extract the information I used for these charts and tooltips. See the github page to view that script. When beginning my analysis, I extracted the Average Age of surgery recipients and pitchers, but I didn't end up using it.<br>
                     
                     <br><strong>Helpful Links</strong><br><br>
                     <strong>Major League Baseball</strong> <a href=https://mlb.com>Link to Webpage</a><br>
