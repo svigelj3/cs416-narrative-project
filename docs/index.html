@@ -563,7 +563,7 @@
                 const box_text = `
                     This chart shows how the number of pitchers has changed overtime, alongside how many innings each pitcher throws on average.
                     Since 2008, the usage has steadily grown year over year, showing that the days of high-endurance starters throwing complete games have passed.
-                    The modern game favors bullpen usage. Analytics indicate that it is harder for opposing batters to produce when the pitcher is new.
+                    The modern game favors liberal use of the bullpen, i.e. relief pitchers. Analytics indicate that it is harder for opposing batters to produce when the pitcher is new.
                 `;
                 const next_button = {
                     "width": 44,
@@ -571,7 +571,7 @@
                     "text": "Next",
                     "fn": "slide1a();"
                 };
-                generate_textbox(box_text, [400, 235], [.35*chart_width, .43*chart_height], next_button);    
+                generate_textbox(box_text, [400, 255], [.42*chart_width, .40*chart_height], next_button);    
             }
 
             function slide1a() {
@@ -640,16 +640,16 @@
                     "text": "Next",
                     "fn": "slide2b();"
                 };
-                generate_textbox(box_text, [600, 150], [.3*chart_width, .25*chart_height], next_button); 
+                generate_textbox(box_text, [600, 150], [.3*chart_width, .32*chart_height], next_button); 
             }
 
             function slide2b() {
                 clean_textbox();
                 const box_text = `
                     The blue line indicates the change in average Changeup velocity over time, and the yellow line the Slider.
-                    From 2008 to 2016 these pitchese were quite similar in velocity, but after 2016 the slider tended slower.
+                    From 2008 to 2016 these pitches were quite similar in velocity, but after 2016 the slider tended to be slower.
                     This is interesting because in 2015, Statcast began publishing Spin Rate statistics. 
-                    This could potentially imply that after those statistics became available, pitchers began focusing on spinning their sliders for more break and less velocity, but since we dont have the data since 2008, we can't say that for sure.
+                    This correlates with the notion that after those statistics became available, pitchers began focusing on spinning their sliders for more break and less velocity, but since we dont have the data since 2008, we can't say that for sure.
                     In any case, both pitches are still being thrown faster now than before.
                 `;
                 const next_button = {
@@ -658,7 +658,7 @@
                     "text": "Next",
                     "fn": "slide2c();"
                 };
-                generate_textbox(box_text, [600, 225], [.3*chart_width, .30*chart_height], next_button); 
+                generate_textbox(box_text, [600, 225], [.3*chart_width, .15*chart_height], next_button); 
             }
 
             function slide2c() {
@@ -674,15 +674,15 @@
                     "text": "Next",
                     "fn": "slide2d();"
                 };
-                generate_textbox(box_text, [425, 185], [.4*chart_width, .66*chart_height], next_button); 
+                generate_textbox(box_text, [425, 185], [.4*chart_width, .59*chart_height], next_button); 
             }
 
             function slide2d() {
                 clean_textbox();
                 const box_text = `
-                    All 4 of these lines show the same trend: Since 2008, pitches are coming in faster and faster.
-                    When combined with the previous trend of more pitchers being used per game, the strategy shift becomes very clear.
-                    Use more pitchers, so each pitcher needs to throw for less innings, meaning they can throw harder on every pitch.
+                    All 4 of these lines show the same trend; Since 2008, pitches are coming in faster and faster.
+                    When combined with the previous trend of more pitchers being used per game, the strategy shift becomes very clear:
+                    use more pitchers, so each pitcher needs to throw for less innings, meaning they can throw harder on every pitch.
                     This means the fastballs will be faster, the breaking balls will have more break, and the batters will have a harder time hitting the ball.
                     However, this doesn't come without consequence.
                 `;
@@ -692,7 +692,7 @@
                     "text": "Next Slide",
                     "fn": "slide3();"
                 };
-                generate_textbox(box_text, [600, 200], [.3*chart_width, .25*chart_height], next_button); 
+                generate_textbox(box_text, [600, 200], [.32*chart_width, .37*chart_height], next_button); 
             }
 
             async function slide3() {
@@ -712,7 +712,7 @@
                     "text": "Next",
                     "fn": "slide3a();"
                 };
-                generate_textbox(box_text, [600, 225], [.3*chart_width, .25*chart_height], next_button); 
+                generate_textbox(box_text, [600, 225], [.1*chart_width, .25*chart_height], next_button); 
             }
 
             function slide3a() {
@@ -728,7 +728,7 @@
                     "text": "Next",
                     "fn": "slide3b();"
                 };
-                generate_textbox(box_text, [425, 195], [.08*chart_width, .7*chart_height], next_button); 
+                generate_textbox(box_text, [425, 195], [.08*chart_width, .65*chart_height], next_button); 
             }
 
             function slide3b() {
@@ -743,7 +743,7 @@
                     "text": "Next",
                     "fn": "slide3c();"
                 };
-                generate_textbox(box_text, [375, 150], [.11*chart_width, .63*chart_height], next_button); 
+                generate_textbox(box_text, [375, 150], [.11*chart_width, .66*chart_height], next_button); 
             }
 
             function slide3c() {
@@ -759,15 +759,16 @@
                     "text": "Next",
                     "fn": "slide3d();"
                 };
-                generate_textbox(box_text, [425, 175], [.24*chart_width, .50*chart_height], next_button); 
+                generate_textbox(box_text, [425, 175], [.24*chart_width, .42*chart_height], next_button); 
             }
 
             function slide3d() {
                 clean_textbox();
                 const box_text = `
-                    In 2008, the anchor fixation technique improved such that UCL repair was a much mmore viable option than full reconstruction.
-                    As a result we can see through the 2010s and 2020s the numbers are higher than anyone in 1974 could have ever imagined.
+                    In 2008, the anchor fixation technique improved such that UCL repair was a much more viable option than full reconstruction.
+                    As a result, we can see that through the 2010s and 2020s the numbers are higher than anyone in 1974 could have ever imagined.
                     Pitchers may also require a second procedure to fully return to their previous form. This also leads to these high surgery counts.
+                    An interesting local minimum is 2019 and 2020 where surgery counts were likely influenced by COVID-19.
                 `;
                 const next_button = {
                     "width": 44,
@@ -775,7 +776,7 @@
                     "text": "Next",
                     "fn": "slide3e();"
                 };
-                generate_textbox(box_text, [475, 200], [.24*chart_width, .36*chart_height], next_button); 
+                generate_textbox(box_text, [500, 225], [.32*chart_width, .15*chart_height], next_button); 
             }
 
             function slide3e() {
@@ -784,7 +785,7 @@
                     The drastic increases in Tommy John surgeries isn't inherently a bad thing.
                     An increase in the number of surgeries implies that the procedure itself is safe and effective, representing a victory in sports medicine.
                     However, it is exacerbated by the strategy shift we have observed. With more pitchers throwing harder, there is more opportunity to injure the UCL and require Tommy John surgery.
-                    The effects of the shift in pitching stretegy has extended past the lines on the field and into the operating room.
+                    The effects of the shift in pitching strategy has extended past the lines on the field and into the operating room.
                     Since the surgery is so effective, we are able to see more pitchers return to the field, which in turn will grow that total pitchers mark.
                     Use the button to go to the explore home page, where the three interactive charts are linked, to learn more about how pitching has changed in MLB.
                 `;
